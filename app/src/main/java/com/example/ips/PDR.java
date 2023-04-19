@@ -21,6 +21,8 @@ public class PDR{
     private MahonyAHRS mahonyAHRS; //Algorithm
     private float stepLength = 0.7f; // get step length estimation from data_process
 
+    //PDR Sample builder
+    private TrajectoryOuterClass.Pdr_Sample.Builder PDRSampleBuilder;
 
     public float[] initialPosition = {0,0};
     public float[] currentPosition;
@@ -30,13 +32,14 @@ public class PDR{
     private long lastStepTimestamp = 0;
     private static final int STEP_TIME_THRESHOLD = 250;
 
-
+    private float StartTime;
     //a constructor that takes a FloorplanView instance as a parameter
     //to pass the initial position chosen on image to PDR to draw trajectory
     public PDR(FloorplanView floorView) {
         this.floorView = floorView;
         stepLength = Switch.data_process_top.getStepLength();
         Log.i("Estimated SL :", String.valueOf(stepLength));
+        PDRSampleBuilder = TrajectoryOuterClass.Pdr_Sample.newBuilder();
     }
     public void calculateRelativePosition(float[] accData, float[] magData, float[] gyroData) {
         final float alpha = 0.8f;
@@ -71,6 +74,11 @@ public class PDR{
         Log.i("Orientation :", String.valueOf(stepDirection_nonAHRS));
         positionX = stepLength * scaleX * Math.sin(stepDirection);
         positionY = stepLength * scaleY * Math.cos(stepDirection);
+
+        PDRSampleBuilder.setX((float) positionX);
+        PDRSampleBuilder.setY((float) positionY);
+        PDRSampleBuilder.setRelativeTimestamp((long) (System.currentTimeMillis()-StartTime));
+        Switch.data_collector_top.TrajectoryTop.addPdrData(PDRSampleBuilder);
         //}
     }
 
@@ -82,6 +90,7 @@ public class PDR{
     }
 
     public void init(){
+        StartTime = System.currentTimeMillis();
         initialPosition = floorView.getInitPos();
         Log.i("Init x-pos in PDR :", String.valueOf(floorView.getInitPos()[0]));
         currentPosition = initialPosition;
