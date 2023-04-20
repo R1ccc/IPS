@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/cyberpunk_light_yellow"
     tools:context=".MainActivity">
     <FrameLayout
         android:id="@+id/fragment"
@@ -20,6 +21,14 @@
         android:id="@+id/pdrView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <Spinner
+        android:id="@+id/spinner3"
+        android:layout_width="168dp"
+        android:layout_height="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/btnTrajectory"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btnTrajectory"

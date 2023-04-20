@@ -2,6 +2,7 @@ package com.example.ips;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -94,6 +95,13 @@ public class Switch extends AppCompatActivity implements SensorEventListener {
         record_frag=new Recording_frag();
         transaction.replace(R.id.fragment,record_frag);
         transaction.commit();
+    }
+    public void stop_record(View view) {
+        transaction = fm.beginTransaction();
+        Fragment fragment = fm.findFragmentById(R.id.fragment);
+        if (fragment != null) {
+            transaction.remove(fragment).commit();
+        }
     }
     public void onResume(){
         super. onResume();

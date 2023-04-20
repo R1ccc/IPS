@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/study/Android/IPS/app/src/main/res/layout/activity_main.xml" value="0.19739583333333333" />
+        <entry key="..\:/study/Android/IPS/app/src/main/res/layout/activity_sendto_cloud.xml" value="0.19739583333333333" />
+        <entry key="..\:/study/Android/IPS/app/src/main/res/layout/activity_switch.xml" value="0.19739583333333333" />
         <entry key="..\:/study/Android/IPS/app/src/main/res/layout/fragment_sensor_graph.xml" value="0.22" />
         <entry key="..\:/study/Android/IPS/app/src/main/res/layout/pdr_view.xml" value="0.1828125" />
         <entry key="..\:/study/Android/IPS/app/src/main/res/layout/record_start.xml" value="0.4466666666666667" />

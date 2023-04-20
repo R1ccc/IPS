@@ -3,15 +3,18 @@
     <item
         android:id="@+id/cloud"
         android:title="Cloud"
+        android:icon="@drawable/cloud1"
         />
     <item
         android:id="@+id/Sensor"
         android:title="Sensor"
+        android:icon="@drawable/sensor12"
         />
 
     <item
         android:id="@+id/PDR"
         android:title="PDR"
+        android:icon="@drawable/foot"
         />
 
 </menu>

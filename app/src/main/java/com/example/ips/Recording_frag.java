@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -70,48 +71,34 @@ public class Recording_frag extends Fragment implements SensorEventListener {
             "Rotation", "Barometer"};
     Spinner graphmenu;
     String currentDisplaySensor;
-    //    LineGraphSeries<DataPoint> accSeries = new LineGraphSeries<DataPoint>(new DataPoint[] {
-//            new DataPoint(0, 1),
-//            new DataPoint(1, 5),
-//            new DataPoint(2, 3),
-//            new DataPoint(3, 2),
-//            new DataPoint(4, 6)
-//    });
-//    LineGraphSeries<DataPoint> accSeriesx = new LineGraphSeries<DataPoint>(new DataPoint[] {
-//            new DataPoint(0, 1),
-//            new DataPoint(1, 5),
-//            new DataPoint(2, 3),
-//            new DataPoint(3, 2),
-//            new DataPoint(4, 6)
-//    });
-//    LineGraphSeries<DataPoint> accSeriesy = new LineGraphSeries<DataPoint>(new DataPoint[] {
-//            new DataPoint(0, 1),
-//            new DataPoint(1, 5),
-//            new DataPoint(2, 3),
-//            new DataPoint(3, 2),
-//            new DataPoint(4, 6)
-//    });
-//    LineGraphSeries<DataPoint> accSeriesz = new LineGraphSeries<DataPoint>(new DataPoint[] {
-//            new DataPoint(0, 1),
-//            new DataPoint(1, 5),
-//            new DataPoint(2, 3),
-//            new DataPoint(3, 2),
-//            new DataPoint(4, 6)
-//    });
+
     LineGraphSeries<DataPoint> accSeriesx = new LineGraphSeries<>();
     LineGraphSeries<DataPoint> accSeriesy = new LineGraphSeries<>();
     LineGraphSeries<DataPoint> accSeriesz = new LineGraphSeries<>();
+    //UI
+    private ImageView imageview1;
+    private ImageView imageview2;
+    private ImageView imageview3;
+    private ImageView imageview4;
+    private ImageView imageview5;
+    private ImageView imageview6;
+    private TextView xvalue;
+    private TextView yvalue;
+    private TextView zvalue;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_sensor_graph, container, false);
         Graph = (GraphView) view.findViewById(R.id.accGraph);
-//        Graph.getGridLabelRenderer().setHorizontalLabelsColor(Color.BLACK);
-//        Graph.getGridLabelRenderer().setVerticalLabelsColor(Color.BLACK);
-        //    accSeries.setColor(Color.parseColor("#3F51B5")); // blue
-//        accSeriesx.setColor(Color.parseColor("#A02422")); // red
-//        accSeriesy.setColor(Color.parseColor("#63AB62")); // green
-//        accSeriesz.setColor(Color.parseColor("#DD7500")); // orange
+        xvalue = (TextView)view.findViewById(R.id.xValue);
+        yvalue = (TextView)view.findViewById(R.id.yValue);
+        zvalue = (TextView)view.findViewById(R.id.zValue);
+        imageview1 = (ImageView) view.findViewById(R.id.imageView);
+        imageview2 = (ImageView) view.findViewById(R.id.imageView2);
+        imageview3 = (ImageView) view.findViewById(R.id.imageView3);
+        imageview4 = (ImageView) view.findViewById(R.id.imageView4);
+        imageview5 = (ImageView) view.findViewById(R.id.imageView5);
+        imageview6 = (ImageView) view.findViewById(R.id.imageView6);
 
         sensorManager = (SensorManager)getActivity().getSystemService(Context.SENSOR_SERVICE);
 
@@ -160,113 +147,49 @@ public class Recording_frag extends Fragment implements SensorEventListener {
             y = accData[1] - gravity[1];
             z = accData[2] - gravity[2];
             // Update the data
-            accSeriesx.appendData(new DataPoint(time, x), true, 100);
-            accSeriesy.appendData(new DataPoint(time, y), true, 100);
-            accSeriesz.appendData(new DataPoint(time, z), true, 100);
+
+            DrawGraph(x,y,z,time);
             time += 1;
-
-//            accTimestamp = sensorEvent.timestamp;
-//            accelerometerValues = (float) Math.sqrt(x*x+y*y+z*z);//-----------sensor data required.
-//            if(timeRecord){
-//                lastTimestamp=accTimestamp/1000000;
-//                timeRecord = false;
-//            }
-
-            //plotSensor(false, accData[0], accData[1], accData[2], accelerometerValues, accTimestamp, "Accelerometer");
-            //Log.i("accelerometer in graph", String.valueOf(x));
         }
         if(sensorEvent.sensor.getType() == Sensor.TYPE_GYROSCOPE&(currentDisplaySensor=="Gyroscope")){
             float[] accData = data_collector.getLastGyroscope();
-            accSeriesx.appendData(new DataPoint(time, accData[0]), true, 100);
-            accSeriesy.appendData(new DataPoint(time, accData[1]), true, 100);
-            accSeriesz.appendData(new DataPoint(time, accData[2]), true, 100);
+
+            DrawGraph(accData[0],accData[1],accData[2],time);
             time += 1;
         }
         if(sensorEvent.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD&(currentDisplaySensor=="Rotation")){
             float[] accData = data_collector.getLastMagnetometer();
-            accSeriesx.appendData(new DataPoint(time, accData[0]), true, 100);
-            accSeriesy.appendData(new DataPoint(time, accData[1]), true, 100);
-            accSeriesz.appendData(new DataPoint(time, accData[2]), true, 100);
+
+            DrawGraph(accData[0],accData[1],accData[2],time);
             time += 1;
         }
         if(sensorEvent.sensor.getType() == Sensor.TYPE_PRESSURE&(currentDisplaySensor=="Barometer")){
             float accData = data_collector.getLastBarometer();
+            //DrawGraph(accData,0,0,time);
+
             accSeriesx.appendData(new DataPoint(time, accData), true, 100);
+            xvalue.setText(Math.round(accData * 10000d) / 10000d + "");
+            yvalue.setText(Math.round(0 * 10000d) / 10000d + "");
+            zvalue.setText(Math.round(0 * 10000d) / 10000d + "");
+
             time += 1;
 
         }
     }
-
+    private void DrawGraph(float xValue, float yValue, float zValue, float time1 ){
+        accSeriesx.appendData(new DataPoint(time1, xValue), true, 100);
+        accSeriesy.appendData(new DataPoint(time1, yValue), true, 100);
+        accSeriesz.appendData(new DataPoint(time1, zValue), true, 100);
+        xvalue.setText(Math.round(xValue * 10000d) / 10000d + "");
+        yvalue.setText(Math.round(yValue * 10000d) / 10000d + "");
+        zvalue.setText(Math.round(zValue * 10000d) / 10000d + "");
+    }
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
 
-    //    public void plotSensor(boolean stop,float sensorValue, float xcoord, float ycoord, float zcoord, long timestamp,String sensorLegend) {
-//
-//        //Time frame
-//        //lastTimestamp = data_collector.getLastAccelerometerTimestamp();
-//        double xValue = timestamp / 1000000; //ms
-//        double currentTimestamp = xValue - lastTimestamp;
-//
-//        //Graph plot
-//        //legend.setText(sensorLegend);
-//        //Graph.setTitle(sensorLegend);
-//        View = Graph.getViewport();
-//
-//        // Add data to buffer
-//        mSensorBuffer[mSensorBufferIndex] = sensorValue;
-//        mSensorBufferIndex++;
-//
-//        if (mSensorBufferIndex == mSensorBuffer.length) {
-//            // Calculate average of buffer
-//            float average = 0, averagex = 0, averagey = 0, averagez = 0;
-//            for (float value : mSensorBuffer) {
-//                average += value;
-//                averagex += xcoord;
-//                averagey += ycoord;
-//                averagez += zcoord;
-//            }
-//            average /= mSensorBuffer.length;
-//            averagex /= mSensorBuffer.length;
-//            averagey /= mSensorBuffer.length;
-//            averagez /= mSensorBuffer.length;
-//
-//
-//            if (currentTimestamp - mLastXvalue >= SAMPLE_PERIOD_MS) {
-//                accSeries.appendData(new DataPoint(currentTimestamp, average), true, 100);
-//                accSeriesx.appendData(new DataPoint(currentTimestamp, averagex), true, 100);
-//                accSeriesy.appendData(new DataPoint(currentTimestamp, averagey), true, 100);
-//                accSeriesz.appendData(new DataPoint(currentTimestamp, averagez), true, 100);
-//
-//                mLastXvalue = currentTimestamp;
-//                Graph.addSeries(accSeries);
-//                Graph.addSeries(accSeriesx);
-//                Graph.addSeries(accSeriesy);
-//                Graph.addSeries(accSeriesz);
-////
-////                AccX.setText(Math.round(averagex * 10000d) / 10000d + "");
-////                AccY.setText(Math.round(averagey * 10000d) / 10000d + "");
-////                AccZ.setText(Math.round(averagez * 10000d) / 10000d + "");
-//
-//            }
-//
-//            //Reset buffer index
-//            mSensorBufferIndex = 0;
-//        }
-//
-//        if(currentTimest amp>15000) {
-//            currentTimestamp=0;
-//            accSeries.resetData(new DataPoint[0]);
-//            accSeriesx.resetData(new DataPoint[0]);
-//            accSeriesy.resetData(new DataPoint[0]);
-//            accSeriesz.resetData(new DataPoint[0]);
-//            //Graph.removeAllSeries();
-//            timeRecord = true;
-//            mLastXvalue = 0;
-//        }
-//
-//    }
+
     private void spinnierInitialization() {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, SensorList);  //默认文件？
@@ -297,11 +220,11 @@ public class Recording_frag extends Fragment implements SensorEventListener {
     private void setupGraph() {
 
         //   accSeriesx = new LineGraphSeries<>();
-        accSeriesx.setTitle("X-axis");
+       // accSeriesx.setTitle("X-axis");
         //    accSeriesy = new LineGraphSeries<>();
-        accSeriesy.setTitle("Y-axis");
+       // accSeriesy.setTitle("Y-axis");
         //    accSeriesz = new LineGraphSeries<>();
-        accSeriesz.setTitle("Z-axis");
+       // accSeriesz.setTitle("Z-axis");
         accSeriesx.setColor(Color.parseColor("#A02422")); // red
         accSeriesy.setColor(Color.parseColor("#63AB62")); // green
         accSeriesz.setColor(Color.parseColor("#DD7500")); // orange
@@ -314,6 +237,6 @@ public class Recording_frag extends Fragment implements SensorEventListener {
         Graph.getViewport().setMinX(0);
         Graph.getViewport().setMaxX(100);
 
-        Graph.getLegendRenderer().setVisible(true);
+     //   Graph.getLegendRenderer().setVisible(true);
     }
 }

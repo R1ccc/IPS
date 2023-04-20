@@ -1,5 +1,6 @@
 package com.example.ips;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -29,7 +30,7 @@ public class Trajectory_draw extends Fragment implements SensorEventListener {
     private Sensor proximitySensor;
     private Sensor gravitySensor;
     private Sensor stepDetector;//step detector
-    public FloorplanView floorplanView;
+    private FloorplanView floorplanView;  //X
     private Recording_frag record_frag;
     private FragmentManager fm=null ;
     private FragmentTransaction transaction =null ;
@@ -39,6 +40,7 @@ public class Trajectory_draw extends Fragment implements SensorEventListener {
     private float[] magData;
     private float[] gyroData;
     private int stepDetect = 0;
+
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.trajectory_drawing, container, false);

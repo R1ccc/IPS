@@ -1,36 +1,29 @@
 package com.example.ips;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.content.Intent;
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
+
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.jjoe64.graphview.series.DataPoint;
 
 public class MainActivity extends PermissionManager{
     private SensorManager sensorManager;
@@ -47,6 +40,11 @@ public class MainActivity extends PermissionManager{
     private FragmentManager fm=null ;
     private FragmentTransaction transaction =null ;
     private Trajectory_draw trajectory_draw;
+
+    //graphmenu
+    String[] Map = { "Nucleus", "Library"};
+    Spinner Mapmenu;
+    static String currentDisplayMap;
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -56,6 +54,8 @@ public class MainActivity extends PermissionManager{
         getSupportActionBar().hide();
         fm = getSupportFragmentManager();
         btnTrajectory = findViewById(R.id.btnTrajectory);
+        Mapmenu = findViewById(R.id.spinner3);
+        spinnierInitialization();
            // record_start = findViewById(R.id.record_start);
         /*    data_collector_top = new SensorDataCollector(this, data_manager_top);
             data_manager_top = new Data_Manager(data_collector_top);
@@ -98,6 +98,7 @@ public class MainActivity extends PermissionManager{
                 return false;
             }
         });
+
     }
 
   /*  public void start_record(View view){
@@ -123,7 +124,32 @@ public class MainActivity extends PermissionManager{
         trajectory_draw =new Trajectory_draw();
         transaction.replace(R.id.fragment,trajectory_draw);
         transaction.commit();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Notice");
+        builder.setMessage("Put your initial position and reference point within the map");
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //
+           }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
+    public void show_dialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Notice");
+        builder.setMessage("Put the point you are facing within the map");
+        builder.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
     //@Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // Do nothing
@@ -142,6 +168,29 @@ public class MainActivity extends PermissionManager{
 //        sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
 //        sensorManager.registerListener(this, gyroscope, SensorManager.SENSOR_DELAY_NORMAL);
     };
+
+    private void spinnierInitialization() {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, Map);  //默认文件？
+        Mapmenu.setAdapter(adapter);
+        Mapmenu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.v("item", (String) parent.getItemAtPosition(position));
+                ((TextView) parent.getChildAt(0)).setTextColor(Color.BLACK);
+
+                if(currentDisplayMap!=(String) parent.getItemAtPosition(position)){
+                    currentDisplayMap=(String) parent.getItemAtPosition(position);
+                }
+
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO Auto-generated method stub
+            }
+        });
+    }
 
     @Override
     protected void onDestroy() {

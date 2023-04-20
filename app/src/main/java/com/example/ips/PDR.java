@@ -11,7 +11,7 @@ import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
 public class PDR{
     private static final float STEP_THRESHOLD = 10.0f;
     private static final long MIN_TIME_BETWEEN_STEPS_MS = 250;
-    private FloorplanView floorView;
+    public FloorplanView floorView;
     private float[] gravity = new float[3];
     private float[] gyroFiltered = new float[3];
     private float[] accFiltered = new float[3];

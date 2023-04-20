@@ -17,10 +17,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IPS">
         <activity
-            android:name=".SendtoCloud"
+            android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".SendtoCloud"
             android:exported="false" />
         <activity
             android:name=".Switch"

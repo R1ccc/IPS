@@ -291,13 +291,15 @@ public class SensorDataCollector implements SensorEventListener, LocationListene
                 MotionSampleBuilder.setAccY(lastAccelerometer[1]);
                 MotionSampleBuilder.setAccY(lastAccelerometer[2]);
                 Acc_flag = true;
+                break;
             case Sensor.TYPE_STEP_DETECTOR:
                 lastStep ++;
                 lastStepTimestamp = currentTimeStamp;
 
                 MotionSampleBuilder.setStepCount(lastStep);
                 Step_flag = true;
-                //break;
+
+                break;
             case Sensor.TYPE_GYROSCOPE:
                 lastGyroscope = event.values.clone();
                 lastGyroscopeTimestamp = currentTimeStamp;
@@ -306,7 +308,7 @@ public class SensorDataCollector implements SensorEventListener, LocationListene
                 MotionSampleBuilder.setGyrY(lastGyroscope[1]);
                 MotionSampleBuilder.setGyrZ(lastGyroscope[2]);
                 Gyro_flag = true;
-                //break;
+                break;
             case Sensor.TYPE_MAGNETIC_FIELD:
                 lastMagnetometer = event.values.clone();
                 lastMagnetometerTimestamp = currentTimeStamp;
@@ -318,7 +320,7 @@ public class SensorDataCollector implements SensorEventListener, LocationListene
                 PositionSampleBuilder.setRelativeTimestamp(System.currentTimeMillis()-StartTime);
                 PositionSampleBuilder.build();
                 TrajectoryTop.addPositionData(PositionSampleBuilder);
-                //break;
+                break;
             case Sensor.TYPE_LIGHT:
                 lastLight = event.values[0];
                 lastLightTimestamp = currentTimeStamp;
@@ -328,12 +330,12 @@ public class SensorDataCollector implements SensorEventListener, LocationListene
                 LightSampleBuilder.setRelativeTimestamp(System.currentTimeMillis()-StartTime);
                 LightSampleBuilder.build();
                 TrajectoryTop.addLightData(LightSampleBuilder);
-                //break;
+                break;
             case Sensor.TYPE_PROXIMITY:
                 lastProximity = event.values[0];
                 lastProximityTimestamp = currentTimeStamp;
 
-                //break;
+                break;
             case Sensor.TYPE_PRESSURE:
                 lastBarometer = event.values[0];
                 lastBarometerTimestamp = currentTimeStamp;
@@ -341,7 +343,7 @@ public class SensorDataCollector implements SensorEventListener, LocationListene
                 PressureSampleBuilder.setRelativeTimestamp(System.currentTimeMillis()-StartTime);
                 PressureSampleBuilder.build();
                 TrajectoryTop.addPressureData(PressureSampleBuilder);
-                //break;
+                break;
             case Sensor.TYPE_ROTATION_VECTOR:
 
                 //change motion sample
@@ -350,6 +352,7 @@ public class SensorDataCollector implements SensorEventListener, LocationListene
                 MotionSampleBuilder.setRotationVectorZ(event.values[2]);
                 MotionSampleBuilder.setRotationVectorW(event.values[3]);
                 Rot_flag = true;
+                break;
         }
         //only when all four sensors are sampled then we set the relative time
         if (Rot_flag & Acc_flag & Gyro_flag & Step_flag){

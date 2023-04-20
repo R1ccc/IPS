@@ -1,5 +1,6 @@
 package com.example.ips;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,13 +12,6 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PointF;
-import android.util.AttributeSet;
-import android.view.MotionEvent;
-import android.view.View;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +19,16 @@ import java.util.List;
 public class FloorplanView extends View {
 
     private Bitmap floorplan;
-    private Bitmap originalFloorplan;
+    private Bitmap nucleusGroundFloorplan;
+    private Bitmap nucleusFirstFloorplan;
+    private Bitmap nucleusSecondFloorplan;
+    private Bitmap nucleusThirdFloorplan;
+    private Bitmap libThirdFloorplan;
+    private Bitmap libGroundFloorplan;
+    private Bitmap libFirstFloorplan;
+    private Bitmap libSecondFloorplan;
+
+
     private Paint positionPaint;
     private Paint referencePaint;
     private Paint trajectoryPaint;
@@ -38,8 +41,11 @@ public class FloorplanView extends View {
     private float initX1 = 0;
     private float initY1 = 0;
     private float initHeading = 0;
-    private int touchCount = 0;
+    private int touchCount = 0;  //xzy
 
+    // Set the desired width and height for the floorplan
+    int desiredWidth = 1024;
+    int desiredHeight = 1535;
     public FloorplanView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
@@ -47,13 +53,18 @@ public class FloorplanView extends View {
 
 
     private void init() {
-        originalFloorplan = BitmapFactory.decodeResource(getResources(), R.drawable.nucleusground); // Replace with the resource ID of your floorplan image
-        // Set the desired width and height for the floorplan
-        int desiredWidth = 1024;
-        int desiredHeight = 1535;
+        nucleusGroundFloorplan = BitmapFactory.decodeResource(getResources(), R.drawable.nucleusground); // Replace with the resource ID of your floorplan image
+        nucleusFirstFloorplan = BitmapFactory.decodeResource(getResources(), R.drawable.nucleus1);
+        nucleusSecondFloorplan = BitmapFactory.decodeResource(getResources(), R.drawable.nucleus2);
+        nucleusThirdFloorplan = BitmapFactory.decodeResource(getResources(), R.drawable.nucleus3);
+        libGroundFloorplan = BitmapFactory.decodeResource(getResources(), R.drawable.libraryg);
+        libFirstFloorplan = BitmapFactory.decodeResource(getResources(), R.drawable.library1);
+        libSecondFloorplan = BitmapFactory.decodeResource(getResources(), R.drawable.library2);
+        libThirdFloorplan = BitmapFactory.decodeResource(getResources(), R.drawable.library3);
+
 
         // Create a scaled bitmap
-        floorplan = Bitmap.createScaledBitmap(originalFloorplan, desiredWidth, desiredHeight, true);
+        floorplan = Bitmap.createScaledBitmap(nucleusGroundFloorplan, desiredWidth, desiredHeight, true);
 
         positionPaint = new Paint();
         positionPaint.setColor(Color.BLUE);
@@ -84,6 +95,7 @@ public class FloorplanView extends View {
                         initPosition.set(initX, initY);
                         Log.i("Initial X:", String.valueOf(initPosition.x));
                         Log.i("Initial y:", String.valueOf(initPosition.y));
+
                     } else if (touchCount == 2) {
                         initX1 = event.getX();
                         initY1 = event.getY();
@@ -108,6 +120,9 @@ public class FloorplanView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         canvas.translate(0, 100);
+        //Select which building you are in
+
+
         // Draw the floorplan image
         canvas.drawBitmap(floorplan, 0, 0, null);
 
@@ -134,6 +149,66 @@ public class FloorplanView extends View {
         float offsetY = 0;
 
         //TODO determine floor
+        Switch.data_process_top.determineFloor();
+        switch (MainActivity.currentDisplayMap){
+            case "Nucleus": {
+                switch (Switch.data_process_top.getCurrentFloor()){
+                    case 0:{
+                        floorplan = Bitmap.createScaledBitmap(nucleusGroundFloorplan, desiredWidth, desiredHeight, true);
+                        Log.i("Current Floor Ground", "");
+                        break;
+                    }
+                    case 1:{
+                        floorplan = Bitmap.createScaledBitmap(nucleusFirstFloorplan, desiredWidth, desiredHeight, true);
+                        Log.i("Current Floor First", "");
+                        break;
+                    }
+                    case 2:{
+                        floorplan = Bitmap.createScaledBitmap(nucleusSecondFloorplan, desiredWidth, desiredHeight, true);
+                        Log.i("Current Floor Second", "");
+                        break;
+                    }
+                    case 3:{
+                        floorplan = Bitmap.createScaledBitmap(nucleusThirdFloorplan, desiredWidth, desiredHeight, true);
+                        Log.i("Current Floor Third", "");
+                        break;
+                    }
+                    default: {
+                        floorplan = Bitmap.createScaledBitmap(nucleusGroundFloorplan, desiredWidth, desiredHeight, true);
+                        break;
+                    }
+                }
+                break;
+            }
+            case "Library": {
+                switch (Switch.data_process_top.getCurrentFloor()){
+                    case 0:{
+                        floorplan = Bitmap.createScaledBitmap(libGroundFloorplan, desiredWidth, desiredHeight, true);
+                        break;
+                    }
+                    case 1:{
+                        floorplan = Bitmap.createScaledBitmap(libFirstFloorplan, desiredWidth, desiredHeight, true);
+                        break;
+                    }
+                    case 2:{
+                        floorplan = Bitmap.createScaledBitmap(libSecondFloorplan, desiredWidth, desiredHeight, true);
+                        break;
+                    }
+                    case 3:{
+                        floorplan = Bitmap.createScaledBitmap(libThirdFloorplan, desiredWidth, desiredHeight, true);
+                        break;
+                    }
+                    default: {
+                        floorplan = Bitmap.createScaledBitmap(libGroundFloorplan, desiredWidth, desiredHeight, true);
+                        break;
+                    }
+                }
+                break;
+            }
+
+            default:floorplan = Bitmap.createScaledBitmap(nucleusGroundFloorplan, desiredWidth, desiredHeight, true);
+
+        }
 //        Switch.data_process_top.determineFloor();
 //        switch (Switch.data_process_top.getCurrentFloor())
 //        {

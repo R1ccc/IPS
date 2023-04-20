@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Data_Process extends MainActivity{
+public class Data_Process {
     private Data_Manager data_manager;
 
     private float pressure;
@@ -139,11 +139,11 @@ public class Data_Process extends MainActivity{
 
             // Check that if the value difference is 2m, then determine if user went up or down.
             // Call the listener method.
-            if (first - last > 2) {
+            if (first - last > 4) {
                 currentFloor++;
                 // remove all of the values because floor was updated!
                 altitudeHistory.clear();
-            }else if (first - last < -2) {
+            }else if (first - last < -4) {
                 currentFloor--;
                 altitudeHistory.clear();
             }
