@@ -107,17 +107,6 @@ public class MainActivity extends PermissionManager{
 
     //@Override
        public void onSensorChanged(SensorEvent event) {
-//        if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-//            pdr.processAccelerometerData(event.values);
-//        } else if (event.sensor.getType() == Sensor.TYPE_GYROSCOPE) {
-//            pdr.processGyroscopeData(event.values);
-//        }
-//
-//        // Calculate the user's position and update trajectory
-//        pdr.updatePosition();
-//
-//        // Display the trajectory on a map or custom view
-//        pdrView.addPosition(pdr.getCurrentPosition());
     }
     public void onClick(View v) {
         transaction = fm.beginTransaction();

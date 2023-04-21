@@ -687,7 +687,8 @@ public final class TrajectoryOuterClass {
       return imuData_.get(index);
     }
     /**
-     * <code>repeated .Motion_Sample imu_data = 2;</code>
+     * <code>repeated .Motion_Sample
+     * = 2;</code>
      */
     @java.lang.Override
     public TrajectoryOuterClass.Motion_SampleOrBuilder getImuDataOrBuilder(

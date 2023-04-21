@@ -184,6 +184,7 @@ public class SensorDataCollector implements SensorEventListener, LocationListene
                 GNSSSampleBuilder.setLongitude((float) location.getLongitude());
                 GNSSSampleBuilder.setSpeed(location.getSpeed());
                 GNSSSampleBuilder.setProvider(location.getProvider());
+                GNSSSampleBuilder.setRelativeTimestamp(System.currentTimeMillis()-StartTime);
                 GNSSSampleBuilder.build();
                 TrajectoryTop.addGnssData(GNSSSampleBuilder);
                 Log.e("Location:", String.valueOf(LocationInfo.longtitude) + ":" + String.valueOf(LocationInfo.latitude));

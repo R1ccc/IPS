@@ -16,13 +16,6 @@ import androidx.core.app.ActivityCompat;
 
 import java.util.List;
 
-/** PermissionsManager.java
- * Authors: Weston Everett, Alexandros Miteloudis Vagionas
- * Affiliation: The University of Edinburgh
- * Description: Class for requesting and holding permission information from the user. PathFinder
- * requires WiFi, Internet, Location, and Activity permissions for the WiFi, location, and step
- * detection.
- */
 
 public class PermissionManager extends AppCompatActivity{
 
